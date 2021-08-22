@@ -1,0 +1,17 @@
+* {
+    font-family: Arial, Helvetica, sans-serif
+}
+
+h1 {
+    font-size: 3em;
+    font-weight: bold;
+}
+
+.info {
+    display: flex;
+    justify-content: space-around;
+}
+
+.info-elem {
+    margin: 24;
+}
