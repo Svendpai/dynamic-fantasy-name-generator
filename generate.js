@@ -51,7 +51,7 @@ function setNameLength(length) {
 }
 
 function setFirstLetter(letter) {
-    nameStartLetter = letter
+    nameStartLetter = letter.toLowerCase()
 }
 
 function getDATA() {
