@@ -12,7 +12,7 @@ let validLetters = []
 let DATA_CSV = ''
 
 nameLength = 6;
-nameStartLetter = ""
+startOfName = ""
 nameEndLetter = ""
 sampleSize = 2;
 dataFileName = "names.csv"
@@ -50,8 +50,8 @@ function setNameLength(length) {
     nameLength = length
 }
 
-function setFirstLetter(letter) {
-    nameStartLetter = letter.toLowerCase()
+function setStartOfName(str) {
+    startOfName = str.toLowerCase()
 }
 
 function getDATA() {
@@ -68,10 +68,7 @@ function getNames() {
     return names
 }
 
-function tempName() {
-    return names[1].name
-}
-
+// FROM https://stackoverflow.com/a/14991797/13164348
 async function parseCSV(str) {
     var arr = [];
     var quote = false;  // 'true' means we're inside a quoted field
@@ -260,8 +257,8 @@ function generateName() {
     let name = ""
 
     // find the starting letter
-    if (nameStartLetter != "") {
-        name += nameStartLetter;
+    if (startOfName != "") {
+        name += startOfName;
     } else {
         let randomNumber = Math.random();
         let percent = 0;
@@ -276,29 +273,49 @@ function generateName() {
     }
 
     // generate the rest
-    for (let i = 0; i < nameLength - 1; i++) {
+    for (let i = 0; i < nameLength - startOfName.length - 1; i++) {
         let latestLetter = name.substring(name.length - 1, name.length)
+        let secondLatestLetter = name.substring(name.length - 2, name.length - 1)
+        let sameLetterTwice = false
 
-        let randomNumber = Math.random()
-        let percent = 0
-        for (let j = 0; j < pairdata.length; j++) {
-            if (pairdata[j].letter == latestLetter) {
-                for (let k = 0; k < (pairdata[j].pairs).length; k++) {
+        if (latestLetter == secondLatestLetter) {
+            sameLetterTwice = true
+        }
 
-                    percent += pairdata[j].pairs[k].percentage
+        let nextLetter = generateNextLetter(latestLetter)
 
-                    if (percent >= randomNumber) {
-                        name = name.substring(0, name.length - 1);
-                        name += pairdata[j].pairs[k].pair
-                        break;
-                    }
-                }
+        // Stop names like "Ellll" from happening
+        if (sameLetterTwice) {
+            while (nextLetter == latestLetter) {
+                nextLetter = generateNextLetter(latestLetter)
             }
         }
+
+        name += nextLetter
     }
 
     return makeFirstLetterCapital(name)
 
+}
+
+function generateNextLetter(latestLetter) {
+    let randomNumber = Math.random()
+    let percent = 0
+    let letter = ''
+    for (let j = 0; j < pairdata.length; j++) {
+        if (pairdata[j].letter == latestLetter) {
+            for (let k = 0; k < (pairdata[j].pairs).length; k++) {
+
+                percent += pairdata[j].pairs[k].percentage
+
+                if (percent >= randomNumber) {
+                    letter = pairdata[j].pairs[k].pair.substring(pairdata[j].pairs[k].pair.length - 1, pairdata[j].pairs[k].pair.length)
+                    break;
+                }
+            }
+        }
+    }
+    return letter
 }
 
 function sortByAlphabet() {

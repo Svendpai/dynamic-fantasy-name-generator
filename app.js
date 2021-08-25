@@ -12,7 +12,7 @@ window.addEventListener('load', () => {
 
     button.addEventListener('click', async () => {
         setNameLength(document.getElementById('name-length').value)
-        setFirstLetter(document.getElementById('first-letter').value)
+        setStartOfName(document.getElementById('first-letter').value)
         var _name = generateName()
         text.textContent = _name
 
@@ -25,7 +25,6 @@ function createNameElement(name) {
     let li = document.createElement("li")
     li.setAttribute('id', name)
     li.appendChild(document.createTextNode(name))
-    //nameList.append(li)
     nameList.insertBefore(li, nameList.childNodes[0])
 }
 
@@ -33,9 +32,9 @@ async function ready() {
     console.log('READY');
     button.disabled = false;
 
-    printPairData();
+    // printPairData();
 
-    printSampleList();
+    // printSampleList();
 
 }
 
